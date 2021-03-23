@@ -1,0 +1,19 @@
+body {
+    background-color: lightblue;
+    padding: 20px;
+    margin: 0;
+}
+h1, h2, h3, p, ul, li {
+    font-family: sans-serif;
+}
+ul.header li {
+    display: inline-list-item;
+    list-style-type: circle;
+    margin: 50px;
+    padding:10px;
+    font-size: 20px;
+}
+
+ul.header {
+    padding: 10px;
+}
