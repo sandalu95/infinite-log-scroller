@@ -9,6 +9,8 @@ const MainPage = () => {
                 <li><Link to="/MyInfiniteScroller" style={{color:"black"}}>Infinite Scroller</Link></li>
                 <li><Link to="/VirtualizedScroller" style={{color:"black"}}>Virtualized Scroller</Link></li>
                 <li><Link to="/MyWindowScroller" style={{color:"black"}}>Window Scroller</Link></li>
+                <li><Link to="/MyNewScroller" style={{color:"black"}}>My New Scroller</Link></li>
+                <li><Link to="/ModifiedScroller" style={{color:"black"}}>Modified Scroller</Link></li>
             </ul>
         </div>
     );
