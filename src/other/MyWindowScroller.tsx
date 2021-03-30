@@ -2,7 +2,7 @@ import React from "react";
 import {WindowScroller} from 'react-virtualized';
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import './index.css';
+import '../index.css';
 
 const MyWindowScroller = () =>{
     const logFile = require('./resources/MOCK_DATA.json');
