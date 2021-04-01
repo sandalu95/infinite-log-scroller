@@ -11,19 +11,21 @@ interface logType {
     ip_address: string
 }
 
+interface Props {
+    startDateTime: string,
+    endDateTime: string,
+    limit: number
+}
+
 const loadTypes = {
     prev: "PREV",
     next: "NEXT"
 }
 
-const ScrollerUser = () => {
-    const startDateTime = "2020-03-19T20:11:02Z";
-    const endDateTime = "2020-05-16T21:56:45Z";
-    const limit = 15;
-
-    const [current, setCurrent] = useState<logType[]>([]);
-    const [prevStart, setPrevStart] = useState<string>("");
-    const [prevEnd, setPrevEnd] = useState<string>("");
+const ScrollerUser = (props: Props) => {
+    const [currentData, setCurrentData] = useState<logType[]>([]);
+    const [currentStartTime, setCurrentStartTime] = useState<string>("");
+    const [currentEndTime, setCurrentEndTime] = useState<string>("");
     const [hasMore, setHasMore] = useState(true);
     const [hasPrev, setHasPrev] = useState(false);
 
@@ -31,7 +33,7 @@ const ScrollerUser = () => {
         service(startDateTime, endDateTime, limit, loadType)
             .then((data: any) => {
                 if (data.length > 0) {
-                    setCurrent(data);
+                    setCurrentData(data);
                     loadType === loadTypes.next ? setHasPrev(true) : setHasMore(true);
                 } else {
                     loadType === loadTypes.next ? setHasMore(false) : setHasPrev(false);
@@ -41,31 +43,37 @@ const ScrollerUser = () => {
     }
 
     useEffect(() => {
-        apiCall(startDateTime, endDateTime, limit, loadTypes.next)
+        apiCall(props.startDateTime, props.endDateTime, props.limit, loadTypes.next)
     }, []);
 
     useEffect(() => {
-        if (current.length > 0) {
-            setPrevEnd(current[current.length - 1].timestamp);
-            setPrevStart(current[0].timestamp);
+        if (currentData.length > 0) {
+            setCurrentEndTime(currentData[currentData.length - 1].timestamp);
+            setCurrentStartTime(currentData[0].timestamp);
         }
-    }, [current]);
+    }, [currentData]);
 
     const loadData = (loadType: string) => {
-        loadType === loadTypes.next ? apiCall(prevEnd, endDateTime, limit, loadTypes.next) : apiCall(startDateTime, prevStart, limit, loadTypes.prev)
-        document.documentElement.scrollTop = 50;
+        loadType === loadTypes.next ? apiCall(currentEndTime, props.endDateTime, props.limit, loadTypes.next) : apiCall(props.startDateTime, currentStartTime, props.limit, loadTypes.prev)
     }
+
+    const scrollerStyle = {border: "1px solid black"};
+
+    const itemStyle = {border: "1px solid grey", paddingLeft: "10px"};
 
     return (
         <ScrollerComponent
             loadData={loadData}
             hasMore={hasMore}
             hasPrev={hasPrev}
+            height={1290}
+            style={scrollerStyle}
+            endMessage={<h4>You have seen everything! :)</h4>}
         >
 
-            <div style={{marginTop: "30px"}}>
-                {current && current.map((row: logType) => (
-                    <div key={row.id} style={{border: "1px solid black", paddingLeft: "10px"}}>
+            <div>
+                {currentData && currentData.map((row: logType) => (
+                    <div key={row.id} style={itemStyle}>
                         <h3>{`${row.id}:-${row.first_name}-${row.last_name}`}</h3>
                         <p>{row.timestamp}</p>
                     </div>
