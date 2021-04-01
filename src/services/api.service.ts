@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = 'http://192.168.8.107:3001/logs';
+const apiUrl = 'http://localhost:3001/logs';
 
 export const service = (startDateTime: string, endDateTime: string, limit: number, loadType: string) => {
     return new Promise((resolve, reject) => {
