@@ -6,6 +6,7 @@ import MyWindowScroller from "./other/MyWindowScroller";
 import MyNewScroller from "./other/MyNewScroller";
 import MainPage from "./MainPage";
 import ScrollerUser from "./ScrollerUser";
+import ScrollerUserNew from "./ScrollerUserNew";
 
 const App = () => {
     return (
@@ -17,6 +18,7 @@ const App = () => {
                 <Route exact path="/MyWindowScroller" component={MyWindowScroller} />
                 <Route exact path="/MyNewScroller" render={(props)=><MyNewScroller startDateTime="2020-03-19T20:11:03Z" endDateTime="2020-05-16T21:56:45Z" limit={15}/>} />
                 <Route exact path="/MyScrollerUser" render={(props)=><ScrollerUser startDateTime="2020-03-19T20:11:02Z" endDateTime="2020-05-16T21:56:45Z" limit={15}/>} />
+                <Route exact path="/MyScrollerUserNew" render={(props)=><ScrollerUserNew startId="1" endId="700"/>} />
             </Switch>
         </Router>
     );

@@ -11,6 +11,7 @@ const MainPage = () => {
                 <li><Link to="/MyWindowScroller" style={{color: "black"}}>Window Scroller</Link></li>
                 <li><Link to="/MyNewScroller" style={{color: "black"}}>My New Scroller</Link></li>
                 <li><Link to="/MyScrollerUser" style={{color: "black"}}>My Scroller User</Link></li>
+                <li><Link to="/MyScrollerUserNew" style={{color: "black"}}>My Scroller User New</Link></li>
             </ul>
         </div>
     );

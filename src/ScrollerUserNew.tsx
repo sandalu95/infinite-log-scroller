@@ -1,6 +1,6 @@
 import ScrollerComponent from "./scroller_library/ScrollerComponent";
 import React, {useRef} from "react";
-import {service} from "./services/api.service";
+import {serviceNew} from "./services/api.service";
 
 interface logType {
     id: number,
@@ -12,17 +12,16 @@ interface logType {
 }
 
 interface Props {
-    startDateTime: string,
-    endDateTime: string,
-    limit: number
+    startId: string,
+    endId: string,
 }
 
-const ScrollerUser = (props: Props) => {
+const ScrollerUserNew = (props: Props) => {
 
     const scrollerRef = useRef<any>(null);
 
-    const apiCall = (startDateTime: string, endDateTime: string, limit: number, loadType: string) => {
-        service(startDateTime, endDateTime, limit, loadType)
+    const apiCall = (startId: string, endId: string, limit: number, loadType: string) => {
+        serviceNew(startId, endId, limit, loadType)
             .then((data: any) => {
                 scrollerRef.current.apiCall(data, loadType);
             })
@@ -32,7 +31,7 @@ const ScrollerUser = (props: Props) => {
 
     const getItems = (currentData: []) => {
         return (
-            <div>
+            <div style={{height: '100px'}}>
                 {currentData && currentData.map((row: logType) => (
                     <div key={row.id} style={itemStyle}>
                         <h3>{`${row.id}:-${row.first_name}-${row.last_name}`}</h3>
@@ -48,21 +47,20 @@ const ScrollerUser = (props: Props) => {
     const itemStyle = {border: "1px solid grey", paddingLeft: "10px"};
 
     return (
-        <div style={{height:'1020px'}}>
-            <ScrollerComponent
-                ref={scrollerRef}
-                getItems={getItems}
-                scrollerHeight={1020}
-                itemHeight={100}
-                style={scrollerStyle}
-                endMessage={<h4>You have seen everything! :)</h4>}
-                apiCall={apiCall}
-                indexProperty={"timestamp"}
-                start={props.startDateTime}
-                end={props.endDateTime}
-            />
-        </div>
+        <ScrollerComponent
+            ref={scrollerRef}
+            getItems={getItems}
+            scrollerHeight={1000}
+            itemHeight={100}
+            style={scrollerStyle}
+            endMessage={<h4>You have seen everything! :)</h4>}
+            apiCall={apiCall}
+            indexProperty={"id"}
+            start={props.startId}
+            end={props.endId}
+        />
+
     );
 }
 
-export default ScrollerUser;
+export default ScrollerUserNew;
