@@ -1,5 +1,5 @@
 import ScrollerComponent from "./scroller_library/ScrollerComponent";
-import React, {useRef} from "react";
+import React from "react";
 import {service} from "./services/api.service";
 
 interface logType {
@@ -19,14 +19,14 @@ interface Props {
 
 const ScrollerUser = (props: Props) => {
 
-    const scrollerRef = useRef<any>(null);
-
     const apiCall = (startDateTime: string, endDateTime: string, limit: number, loadType: string) => {
-        service(startDateTime, endDateTime, limit, loadType)
-            .then((data: any) => {
-                scrollerRef.current.apiCall(data, loadType);
-            })
-            .catch(err => console.log(err));
+        return new Promise((resolve, reject) => {
+            service(startDateTime, endDateTime, limit, loadType)
+                .then((data: any) => {
+                    resolve(data)
+                })
+                .catch(err => reject(err));
+        })
     }
 
 
@@ -50,7 +50,6 @@ const ScrollerUser = (props: Props) => {
     return (
         <div style={{height:'1020px'}}>
             <ScrollerComponent
-                ref={scrollerRef}
                 getItems={getItems}
                 scrollerHeight={1020}
                 itemHeight={100}

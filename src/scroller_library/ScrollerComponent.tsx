@@ -1,4 +1,4 @@
-import React, {CSSProperties, forwardRef, ReactNode, useEffect, useImperativeHandle, useState} from "react";
+import React, {CSSProperties, ReactNode, useEffect, useState} from "react";
 
 type Fn1 = (currentData: []) => any;
 
@@ -30,7 +30,7 @@ const isElementAtBottom = (target: HTMLElement) => {
     return (target.scrollTop + target.clientHeight >= target.scrollHeight);
 }
 
-const ScrollerComponent = forwardRef((props: Props, ref) => {
+const ScrollerComponent = (props: Props) => {
     const [currentData, setCurrentData] = useState<any>([]);
     const [currentStart, setCurrentStart] = useState<string>("");
     const [currentEnd, setCurrentEnd] = useState<string>("");
@@ -39,23 +39,26 @@ const ScrollerComponent = forwardRef((props: Props, ref) => {
     const [showLoadMore, setShowLoadMore] = useState(false);
     const [showLoadPrev, setShowLoadPrev] = useState(false);
 
-    const limit = (props.scrollerHeight / props.itemHeight) + (props.threshold ? props.threshold : 5);
+    const limit = parseInt(String(props.scrollerHeight / props.itemHeight), 10) + (props.threshold ? props.threshold : 5);
 
-    useImperativeHandle(ref, () => ({
-        apiCall(data: any, loadType: string) {
-            if (data.length > 0) {
-                setCurrentData(data);
-                loadType === loadTypes.next ? setHasPrev(true) : setHasMore(true);
-                setShowLoadPrev(false);
-                setShowLoadMore(false);
-            } else {
-                loadType === loadTypes.next ? setHasMore(false) : setHasPrev(false);
-            }
-        }
-    }));
+    const apiCall = (start: string, end: string, limit: number, loadType: string) => {
+        props.apiCall(start, end, limit, loadType)
+            .then((data: any) => {
+                if (data.length > 0) {
+                    setCurrentData(data);
+                    loadType === loadTypes.next ? setHasPrev(true) : setHasMore(true);
+                    setShowLoadPrev(false);
+                    setShowLoadMore(false);
+                } else {
+                    loadType === loadTypes.next ? setHasMore(false) : setHasPrev(false);
+                }
+            })
+            .catch(((err: any) => console.log(err)));
+    }
+
 
     useEffect(() => {
-        props.apiCall(props.start, props.end, limit, loadTypes.next)
+        apiCall(props.start, props.end, limit, loadTypes.next)
     }, []);
 
     useEffect(() => {
@@ -66,14 +69,12 @@ const ScrollerComponent = forwardRef((props: Props, ref) => {
     }, [currentData]);
 
     const loadData = (loadType: string) => {
-        loadType === loadTypes.next ? props.apiCall(currentEnd, props.end, limit, loadTypes.next) : props.apiCall(props.start, currentStart, limit, loadTypes.prev)
+        loadType === loadTypes.next ? apiCall(currentEnd, props.end, limit, loadTypes.next) : apiCall(props.start, currentStart, limit, loadTypes.prev)
     }
 
     const style = {
         height: props.scrollerHeight,
         overflowY: 'scroll',
-        // display:'flex',
-        // flexDirection:'column',
         ...props.style
     } as CSSProperties;
 
@@ -101,6 +102,6 @@ const ScrollerComponent = forwardRef((props: Props, ref) => {
             <div>{!hasMore && props.endMessage}</div>
         </div>
     );
-})
+}
 
 export default ScrollerComponent
